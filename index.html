@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Érzékek Játéka - Online</title>
+<title>Érzékek Játéka - 60 Mező́s Prémium Pálya</title>
 <style>
 body {
 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+background: linear-gradient(135deg, #0b091a, #1f1b3a, #120f24);
 color: #fff;
 margin: 0;
 padding: 10px;
@@ -17,79 +17,90 @@ align-items: center;
 min-height: 100vh;
 }
 .container {
-max-width: 750px;
+max-width: 700px;
 width: 100%;
 background: rgba(255, 255, 255, 0.04);
 backdrop-filter: blur(12px);
 border-radius: 20px;
 padding: 20px;
-box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
 border: 1px solid rgba(255, 255, 255, 0.1);
 text-align: center;
 }
 h1 {
 color: #ff477e;
-margin-bottom: 5px;
+margin-bottom: 2px;
 font-size: 1.8rem;
-letter-spacing: 1px;
 }
 .subtitle {
-font-size: 0.9rem;
-color: #b8b8d1;
-margin-bottom: 15px;
+font-size: 0.85rem;
+color: #a2a2bc;
+margin-bottom: 10px;
 }
 .level-badge {
 background: linear-gradient(135deg, #ff477e, #ff758c);
 color: white;
-padding: 6px 16px;
+padding: 5px 16px;
 border-radius: 20px;
 font-size: 0.9rem;
 font-weight: bold;
 display: inline-block;
-margin-bottom: 20px;
+margin-bottom: 15px;
 box-shadow: 0 4px 15px rgba(255, 71, 126,.4);
 }
 
-/* Kacskaringós Tábla / Kígyózó Pálya Stílus */
+/* 60 MEZŐS KACSKARINGÓS PÁLYA */
 .board {
-display: grid;
-grid-template-columns: repeat(6, 1fr);
-gap: 10px;
-margin-bottom: 25px;
-background: rgba(0, 0, 0, 0.4);
-padding: 15px;
+display: flex;
+flex-direction: column;
+gap: 8px;
+margin-bottom: 20px;
+background: rgba(0, 0, 0, 0.5);
+padding: 12px;
 border-radius: 16px;
-border: 2px dashed rgba(255, 71, 126, 0.3);
+border: 2px solid rgba(255, 71, 126, 0.3);
+max-height: 350px;
+overflow-y: auto;
 }
+.board-row {
+display: flex;
+justify-content: space-between;
+gap: 6px;
+}
+.board-row.reverse {
+flex-direction: row-reverse;
+}
+
 .tile {
-background: rgba(255, 255, 255, 0.06);
-border-radius: 10px;
-height: 55px;
+background: rgba(255, 255, 255, 0.05);
+border-radius: 8px;
+width: 42px;
+height: 42px;
 display: flex;
 flex-direction: column;
 align-items: center;
 justify-content: center;
 font-weight: bold;
-font-size: 0.9rem;
+font-size: 0.8rem;
 position: relative;
 border: 1px solid rgba(255, 255, 255, 0.1);
-transition: all 0.3s ease;
+flex-shrink: 0;
 }
 .tile span {
-font-size: 0.65rem;
+font-size: 0.5rem;
 opacity: 0.7;
 }
 
-/* Szintek színei a táblán */
-.tile.level-1 { border-bottom: 4px solid #00f5d4; color: #00f5d4; }
-.tile.level-2 { border-bottom: 4px solid #fee440; color: #fee440; }
-.tile.level-3 { border-bottom: 4px solid #ff477e; color: #ff477e; }
+/* 20-20-20 zóna színek */
+.tile.level-1 { border-bottom: 3px solid #00f5d4; color: #00f5d4; }
+.tile.level-2 { border-bottom: 3px solid #fee440; color: #fee440; }
+.tile.level-3 { border-bottom: 3px solid #ff477e; color: #ff477e; }
 
-/* Aktív Bábu a mezőn */
+/* Aktív bábu jelölés */
 .tile.active {
 background: #ff477e !important;
 color: white !important;
-box-shadow: 0 0 25px #ff477e;
+box-shadow: 0 0 15px #ff477e;
 transform: scale(1.15);
 z-index: 10;
 border: 2px solid #fff;
@@ -99,68 +110,95 @@ color: #fff;
 opacity: 1;
 }
 
+/* VIZUÁLIS DOBÓKOCKA ÉS VEZÉRLÉS */
+.control-panel {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 20px;
+margin-bottom: 15px;
+}
+.dice-box {
+width: 55px;
+height: 55px;
+background: #fff;
+color: #120f24;
+font-size: 1.8rem;
+font-weight: bold;
+border-radius: 12px;
+display: flex;
+align-items: center;
+justify-content: center;
+box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+border: 2px solid #ff477e;
+animation: none;
+}
+@keyframes shake {
+0% { transform: translate(1px, 1px) rotate(0deg); }
+20% { transform: translate(-3px, 0px) rotate(-10deg); }
+40% { transform: translate(1px, -1px) rotate(10deg); }
+60% { transform: translate(-3px, 1px) rotate(0deg); }
+80% { transform: translate(1px, -1px) rotate(5deg); }
+100% { transform: translate(0, 0) rotate(0deg); }
+}
+.dice-box.rolling {
+animation: shake 0.4s ease;
+background: #ff758c;
+color: #fff;
+}
+
 button.roll-btn {
 background: linear-gradient(135deg, #ff477e, #f72585);
 color: white;
 border: none;
-padding: 14px 30px;
+padding: 12px 28px;
 font-size: 1.1rem;
 border-radius: 50px;
 cursor: pointer;
 font-weight: bold;
 box-shadow: 0 5px 20px rgba(247, 37, 133, 0.5);
 transition: 0.2s;
-margin-bottom: 15px;
 }
 button.roll-btn:hover {
 transform: scale(1.05);
 }
 
 .task-box {
-margin-top: 15px;
-padding: 20px;
+margin-top: 10px;
+padding: 15px;
 background: rgba(0, 0, 0, 0.5);
-border-radius: 14px;
+border-radius: 12px;
 display: none;
 text-align: left;
-border-left: 5px solid #ff477e;
-animation: fadeIn 0.4s ease;
-}
-@keyframes fadeIn {
-from { opacity: 0; transform: translateY(10px); }
-to { opacity: 1; transform: translateY(0); }
+border-left: 4px solid #ff477e;
 }
 .task-box h3 {
 margin-top: 0;
 color: #ff758c;
-font-size: 1.2rem;
+font-size: 1.1rem;
 text-align: center;
 }
 .timer {
-font-size: 1.3rem;
+font-size: 1.1rem;
 color: #fee440;
 font-weight: bold;
-margin-top: 12px;
+margin-top: 8px;
 text-align: center;
 }
 .powerups {
-margin-top: 20px;
+margin-top: 15px;
 display: flex;
 justify-content: center;
-gap: 12px;
+gap: 10px;
 }
 .powerup-btn {
 background: #1b1b2f;
 border: 1px solid #ff477e;
 color: #fff;
-font-size: 0.85rem;
-padding: 10px 15px;
+font-size: 0.8rem;
+padding: 8px 12px;
 border-radius: 8px;
 cursor: pointer;
-transition: 0.2s;
-}
-.powerup-btn:hover {
-background: #ff477e;
 }
 </style>
 </head>
@@ -168,17 +206,21 @@ background: #ff477e;
 
 <div class="container">
 <h1>Érzékek Játéka</h1>
-<div class="subtitle">Páros felfedezés, intimitás és szenvedély</div>
+<div class="subtitle">60 Mező́s Kacskaringós Kiadás</div>
 <div class="level-badge" id="levelIndicator">1. Szint: Előjáték (Intim zóna)</div>
 
-<!-- Kacskaringós Tábla -->
+<!-- Pálya -->
 <div class="board" id="board"></div>
 
-<button class="roll-btn" onclick="rollDice()">🎲 Dobás a kockával</button>
+<!-- Vizuális Kocka és Dobás Gomb -->
+<div class="control-panel">
+<div class="dice-box" id="diceBox">🎲</div>
+<button class="roll-btn" onclick="rollDice()">Kockadobás</button>
+</div>
 
 <div class="task-box" id="taskBox">
 <h3 id="taskTitle">Feladat</h3>
-<p id="taskDesc">Itt jelenik meg a kártya tartalma...</p>
+<p id="taskDesc">Itt jelenik meg a kártya...</p>
 <div class="timer" id="timerDisplay"></div>
 </div>
 
@@ -189,12 +231,11 @@ background: #ff477e;
 </div>
 
 <script>
-const totalTiles = 24;
+const totalTiles = 60; // Pontosan 60 mező
 let currentPos = 1;
 let skips = 1;
 let swaps = 1;
 
-// Az Érzékek Játéka stílusú tematikus kártyák szintekre bontva
 const tasks = {
 level1: [
 { title: "Gyengéd szemkontaktus", desc: "Nézzetek egymás szemébe szótlanul 30 másodpercig, miközben lassan simítjátok egymás arcát.", time: 30 },
@@ -203,7 +244,7 @@ level1: [
 ],
 level2: [
 { title: "Érzéki masszázs", desc: "Válasszatok ki egy testrészt (kéz, láb vagy nyak), és masszírozzátok át figyelmesen.", time: 60 },
-{ title: "Felfedezés csukott szemmel", desc: "A párod csukja be a szemét (vagy használjatok kendőt), és finoman érints meg különböző pontokat a testén.", time: 45 },
+{ title: "Felfedezés csukott szemmel", desc: "A párod csukja be a szemét, és finoman érints meg különböző pontokat a testén.", time: 45 },
 { title: "Szenvedélyes csók-hullám", desc: "Váltakozva adjatok egymásnak 3 apró, majd egy nagyon mély, szenvedélyes csókot.", time: 30 }
 ],
 level3: [
@@ -216,7 +257,32 @@ level3: [
 function createBoard() {
 const board = document.getElementById("board");
 board.innerHTML = "";
-for (let i = 1; i <= totalTiles; i++) {
+
+let tilesPerRow = 6; // Soronként 6 mező a szép kanyarhoz
+let totalRows = totalTiles / tilesPerRow;
+let tileIndex = 1;
+
+for (let r = 0; r < totalRows; r++) {
+let rowDiv = document.createElement("div");
+rowDiv.classList.add("board-row");
+
+if (r % 2 !== 0) {
+rowDiv.classList.add("reverse");
+}
+
+let rowTiles = [];
+for (let c = 0; c < tilesPerRow; c++) {
+if (tileIndex <= totalTiles) {
+rowTiles.push(tileIndex);
+tileIndex++;
+}
+}
+
+if (r % 2 !== 0) {
+rowTiles.reverse();
+}
+
+rowTiles.forEach(i => {
 let tile = document.createElement("div");
 tile.classList.add("tile");
 tile.id = `tile-${i}`;
@@ -226,10 +292,11 @@ label.innerText = i;
 tile.appendChild(label);
 
 let sub = document.createElement("span");
-if (i <= 8) {
+// 20-20-20 elosztás szintek szerint
+if (i <= 20) {
 tile.classList.add("level-1");
 sub.innerText = "Intim";
-} else if (i <= 16) {
+} else if (i <= 40) {
 tile.classList.add("level-2");
 sub.innerText = "Érzéki";
 } else {
@@ -237,7 +304,10 @@ tile.classList.add("level-3");
 sub.innerText = "Forró";
 }
 tile.appendChild(sub);
-board.appendChild(tile);
+rowDiv.appendChild(tile);
+});
+
+board.appendChild(rowDiv);
 }
 updateBoardUI();
 }
@@ -254,29 +324,36 @@ t.classList.remove("active");
 }
 
 function rollDice() {
-let dice = Math.floor(Math.random() * 3) + 1; // 1-3 lépés
+let diceBox = document.getElementById("diceBox");
+diceBox.classList.add("rolling");
+diceBox.innerText = "🎲";
+
+setTimeout(() => {
+diceBox.classList.remove("rolling");
+let dice = Math.floor(Math.random() * 6) + 1; // 1-6 dobás lehetőség
+diceBox.innerText = dice;
+
 currentPos += dice;
 if (currentPos > totalTiles) {
 currentPos = totalTiles;
-alert("Elértétek a célt! 🎉 Most jön a fő attrakció...");
+alert("Elértétek a célt! 🎉 Gratulálok a teljesítéshez!");
 }
 
 updateBoardUI();
 
-// Szintek és kártyák kiválasztása a pozíció alapján
+// 20-20-20 zóna feliratok
 let levelKey = 'level1';
-let levelText = "1. Szint: Előjáték (Intim zóna) 🌿";
+let levelText = "1. Szint: Előjáték (1-20. mező) 🌿";
 
-if (currentPos > 8 && currentPos <= 16) {
+if (currentPos > 20 && currentPos <= 40) {
 levelKey = 'level2';
-levelText = "2. Szint: Érzéki fázis 🔥";
-} else if (currentPos > 16) {
+levelText = "2. Szint: Érzéki fázis (21-40. mező) 🔥";
+} else if (currentPos > 40) {
 levelKey = 'level3';
-levelText = "3. Szint: Forró zóna (Hard) ❤️‍🔥";
+levelText = "3. Szint: Forró zóna (41-60. mező) ❤️‍🔥";
 }
 document.getElementById("levelIndicator").innerText = levelText;
 
-// Kártya sorsolás az adott zónából
 let currentPool = tasks[levelKey];
 let randomTask = currentPool[Math.floor(Math.random() * currentPool.length)];
 
@@ -291,6 +368,7 @@ startTimer(randomTask.time);
 } else {
 document.getElementById("timerDisplay").innerText = "";
 }
+}, 400);
 }
 
 function startTimer(duration) {
@@ -311,11 +389,11 @@ timerDisplay.innerText = "⏰ Lejárt az idő!";
 function usePowerUp(type) {
 if (type === 'skip' && skips > 0) {
 skips--;
-alert("Elutasító kártya felhasználva! Ezt a feladatot kihagyhatjátok.");
+alert("Elutasító kártya felhasználva!");
 document.querySelector('.powerups button:nth-child(1)').innerText = `🚫 Elutasító (${skips})`;
 } else if (type === 'swap' && swaps > 0) {
 swaps--;
-alert("Csere kártya felhasználva! A feladat szerepet cserél.");
+alert("Csere kártya felhasználva!");
 document.querySelector('.powerups button:nth-child(2)').innerText = `🔄 Csere (${swaps})`;
 } else {
 alert("Már felhasználtátok ezt a kártyát!");
